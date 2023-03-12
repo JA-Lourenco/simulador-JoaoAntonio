@@ -1,9 +1,15 @@
-import { Input } from "./styled";
+import { Input, Label } from "./styled";
 
 interface InputCompProps {
+  label: string;
   placeholder?: string;
 }
 
-export const InputComp = ({ placeholder }: InputCompProps) => {
-  return <Input placeholder={placeholder} />;
+export const InputComp = ({ label, placeholder }: InputCompProps) => {
+  return (
+    <>
+      <Label>{label}</Label>
+      <Input placeholder={placeholder} />
+    </>
+  );
 };

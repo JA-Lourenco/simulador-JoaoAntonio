@@ -1,8 +1,14 @@
 import styled from "styled-components";
 
+export const Label = styled.label`
+  color: var(--black);
+  margin-top: 15px;
+  font-size: 20px;
+`;
+
 export const Input = styled.input`
   width: 300px;
-  height: 40px;
+  height: 50px;
   padding-left: 7px;
 
   outline: none;
