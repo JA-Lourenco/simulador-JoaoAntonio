@@ -13,5 +13,4 @@ export const Image = styled.img``;
 
 export const Title = styled.h1`
   color: var(--white);
-  /* margin: 0 auto; */
 `;
