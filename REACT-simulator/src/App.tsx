@@ -1,9 +1,10 @@
-function App() {
-  return (
-    <>
-      <div>Hello World</div>
-    </>
-  );
-}
+import { BrowserRouter } from "react-router-dom";
+import { RoutesApp } from "./routes";
 
-export default App;
+export const App = () => {
+  return (
+    <BrowserRouter>
+      <RoutesApp />
+    </BrowserRouter>
+  );
+};
