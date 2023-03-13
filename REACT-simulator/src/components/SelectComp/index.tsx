@@ -1,21 +1,37 @@
 import { Label, Select } from "./styled";
 
+export interface OptionsProps {
+  id: number;
+  name: string;
+}
 interface SelectCompProps {
   label: string;
   defaultOption?: string;
+  options: OptionsProps[];
 }
 
-export const SelectComp = ({ label, defaultOption }: SelectCompProps) => {
+export const SelectComp = ({
+  label,
+  defaultOption,
+  options,
+}: SelectCompProps) => {
+  console.log("options", options);
+
   return (
     <>
       <Label>{label}</Label>
       <Select>
-        <option selected>
+        <option defaultValue="">
           {defaultOption ? defaultOption : "Selecione uma opção"}
         </option>
-        <option>Teste 1</option>
-        <option>Teste 2</option>
-        <option>Teste 3</option>
+        {options?.map((opt) => {
+          console.log("opt", opt);
+          return (
+            <option key={opt.id} id={opt.id.toString()}>
+              {opt.name}
+            </option>
+          );
+        })}
       </Select>
     </>
   );
