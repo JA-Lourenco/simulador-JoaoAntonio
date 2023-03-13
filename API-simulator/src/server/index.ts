@@ -1,11 +1,13 @@
 import express from "express";
 
-import { routerHelloWorld } from "./routes/helloWorld";
-import { routerTest } from "./routes/test";
+import { routerInitialData } from "./routes/initialData";
+import { routerProducts } from "./routes/products";
+import { routerTaxRatio } from "./routes/taxRatio";
 
 const routes = express.Router();
 
-routes.use("/hello", routerHelloWorld);
-routes.use("/test", routerTest);
+routes.use("/", routerInitialData);
+routes.use("/products", routerProducts);
+routes.use("/tax-ratio", routerTaxRatio);
 
 export { routes };

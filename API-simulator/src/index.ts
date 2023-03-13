@@ -1,16 +1,12 @@
 import express from "express";
 
 import { routes } from "./server";
-import { querySQL } from "./utils/querySQL";
+import cors from "cors";
 
 const app = express();
 const port = 3000;
 
+app.use(cors());
 app.use(routes);
-
-querySQL({
-  entity: "TipoPessoa",
-  log: true,
-});
 
 app.listen(port, () => console.log(`-> Running at http://localhost:${port}`));

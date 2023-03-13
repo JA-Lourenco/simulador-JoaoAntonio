@@ -24,13 +24,14 @@ const querySQL = async ({
         ${attributes ? attributes : "*"}
       FROM ${entity}
       ${extra ? extra : ""}
-      ${condition ? `WHERE ${condition}` : ""}
+      ${condition ? condition : ""}
     `;
 
     if (log) console.log("querySQL log: ", sql);
 
     const result = await mssql.query(sql);
-    console.log("Result: ", result);
+
+    return result.recordset;
   } catch (error) {
     console.log("querySQL Error: ", error);
     throw error;
