@@ -5,7 +5,7 @@ interface CardProps {
   firstProperty: string;
   secondProperty: string;
   firstResult: string | undefined;
-  secondResult: string | undefined;
+  secondResult: string | number | undefined;
 }
 
 export const Card = ({

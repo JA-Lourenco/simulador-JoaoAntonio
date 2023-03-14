@@ -95,11 +95,17 @@ export const Home = () => {
     amount,
   }: TaxRatioProps) => {
     try {
-      const { data } = await api.get<GetResultProps>(
-        `/tax-ratio?idTipoPessoa=${idPersonType}&idModalidade=${idModality}&idProduto=${idProduct}&rendaMinima=${amount}`
-      );
+      if (amount === undefined) amount = "0";
 
-      setResult(data);
+      if (!idPersonType || !idModality || !idProduct) {
+        alert("Atenção! Favor inserir os dados antes de realizar a simulação.");
+      } else {
+        const { data } = await api.get<GetResultProps>(
+          `/tax-ratio?idTipoPessoa=${idPersonType}&idModalidade=${idModality}&idProduto=${idProduct}&rendaMinima=${amount}`
+        );
+
+        setResult(data);
+      }
     } catch (error) {
       console.log("handleGetTaxioRatio error: ", error);
     }
@@ -155,7 +161,9 @@ export const Home = () => {
             firstProperty="Segmento"
             secondProperty="Taxa"
             firstResult={result?.nome}
-            secondResult={`${result?.taxa}%`}
+            secondResult={
+              result?.taxa === null ? "Não Disponível" : `${result?.taxa}%`
+            }
           />
         </ResultSection>
       </Container>
