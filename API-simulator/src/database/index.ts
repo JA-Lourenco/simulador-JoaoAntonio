@@ -23,7 +23,7 @@ const databaseConnect = async () => {
   try {
     await mssql.connect(sqlConfig);
   } catch (error) {
-    console.log("Error: ", error);
+    console.log("databaseConnect error: ", error);
     throw error;
   }
 };

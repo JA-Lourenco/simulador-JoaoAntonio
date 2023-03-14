@@ -10,19 +10,16 @@ export const getProducts = async (req: Request, res: Response) => {
       LEFT JOIN Produto p ON p.idProduto = rt.idProduto
     `;
 
-    const result = await querySQL({
-      attributes: "DISTINCT p.nome",
+    const products = await querySQL({
+      attributes: "DISTINCT p.idProduto, p.nome",
       entity: "RelacaoTaxas rt",
       extra: join,
       condition: `WHERE tp.idTipoPessoa = ${idTipoPessoa}`,
-      log: true,
     });
 
-    console.log("result", result);
-
-    res.status(200).json(result);
+    res.status(200).json(products);
   } catch (error) {
-    console.log("getHelloWorld error", error);
+    console.log("getProducts error: ", error);
     return res.status(500).send(error);
   }
 };

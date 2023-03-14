@@ -33,7 +33,7 @@ const querySQL = async ({
 
     return result.recordset;
   } catch (error) {
-    console.log("querySQL Error: ", error);
+    console.log("querySQL error: ", error);
     throw error;
   }
 };

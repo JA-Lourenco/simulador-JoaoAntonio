@@ -18,7 +18,7 @@ export const getInitialData = async (req: Request, res: Response) => {
 
     res.status(200).json(result);
   } catch (error) {
-    console.log("getAllData error", error);
+    console.log("getInitialData error: ", error);
     return res.status(500).send(error);
   }
 };
