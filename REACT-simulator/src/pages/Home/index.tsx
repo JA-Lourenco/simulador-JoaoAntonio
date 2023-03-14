@@ -4,7 +4,8 @@ import { Container, InputSection, ResultSection } from "./styled";
 
 import { Header } from "../../components/Header";
 import { SelectComp, OptionsProps } from "../../components/SelectComp";
-import { InputComp } from "../../components/Input";
+import { InputComp } from "../../components/InputComp";
+import { ButtonComp } from "../../components/ButtonComp";
 import { Card } from "../../components/Card";
 
 import { api } from "../../services/api";
@@ -18,7 +19,14 @@ interface ModalitiesProps {
   categoria: string;
 }
 
-interface ProductsProps {
+interface TaxRatioProps {
+  idPersonType: string;
+  idModality: string;
+  idProduct: string;
+  amount: string;
+}
+
+interface GetProductsProps {
   idProduto: number;
   nome: string;
 }
@@ -28,10 +36,17 @@ interface GetInitialDataProps {
   modalities: ModalitiesProps[];
 }
 
+interface GetResultProps {
+  nome: string;
+  taxa: number;
+}
+
 export const Home = () => {
   const [personTypes, setPersonTypes] = useState<OptionsProps[]>([]);
   const [modalities, setModalities] = useState<OptionsProps[]>([]);
   const [products, setProducts] = useState<OptionsProps[]>([]);
+  const [taxRatio, setTaxRatio] = useState<TaxRatioProps>({} as TaxRatioProps);
+  const [result, setResult] = useState<GetResultProps>();
 
   const getInitialData = async () => {
     try {
@@ -58,7 +73,7 @@ export const Home = () => {
 
   const handleGetProducts = async (idTipoPessoa: string) => {
     try {
-      const { data } = await api.get<ProductsProps[]>(
+      const { data } = await api.get<GetProductsProps[]>(
         `/products?idTipoPessoa=${idTipoPessoa}`
       );
 
@@ -70,6 +85,23 @@ export const Home = () => {
       setProducts(tempProducts);
     } catch (error) {
       console.log("handleGetProducts error: ", error);
+    }
+  };
+
+  const handleGetTaxRatio = async ({
+    idPersonType,
+    idModality,
+    idProduct,
+    amount,
+  }: TaxRatioProps) => {
+    try {
+      const { data } = await api.get<GetResultProps>(
+        `/tax-ratio?idTipoPessoa=${idPersonType}&idModalidade=${idModality}&idProduto=${idProduct}&rendaMinima=${amount}`
+      );
+
+      setResult(data);
+    } catch (error) {
+      console.log("handleGetTaxioRatio error: ", error);
     }
   };
 
@@ -86,16 +118,35 @@ export const Home = () => {
           <SelectComp
             label="Tipo Pessoa"
             options={personTypes}
-            onChange={(value) => handleGetProducts(value)}
+            onChange={(value) => {
+              handleGetProducts(value);
+              setTaxRatio((prev) => ({ ...prev, idPersonType: value }));
+            }}
           />
           <SelectComp
             label="Modalidade"
             options={modalities}
-            onChange={() => {}}
+            onChange={(value) =>
+              setTaxRatio((prev) => ({ ...prev, idModality: value }))
+            }
           />
-          <SelectComp label="Produto" options={products} onChange={() => {}} />
+          <SelectComp
+            label="Produto"
+            options={products}
+            onChange={(value) =>
+              setTaxRatio((prev) => ({ ...prev, idProduct: value }))
+            }
+          />
 
-          <InputComp label="Renda" placeholder="Valor da Renda Mínima" />
+          <InputComp
+            type="number"
+            label="Renda"
+            placeholder="Valor da Renda Mínima"
+            min={0}
+            onChange={(value) =>
+              setTaxRatio((prev) => ({ ...prev, amount: value }))
+            }
+          />
         </InputSection>
 
         <ResultSection>
@@ -103,10 +154,25 @@ export const Home = () => {
             title="Resultado"
             firstProperty="Segmento"
             secondProperty="Taxa"
-            firstResult="PF5"
-            secondResult="0,5%"
+            firstResult={result?.nome}
+            secondResult={`${result?.taxa}%`}
           />
         </ResultSection>
+      </Container>
+
+      <Container>
+        <ButtonComp
+          type="button"
+          title="SIMULAR"
+          onClick={() =>
+            handleGetTaxRatio({
+              idPersonType: taxRatio.idPersonType,
+              idModality: taxRatio.idModality,
+              idProduct: taxRatio.idProduct,
+              amount: taxRatio.amount,
+            })
+          }
+        />
       </Container>
     </>
   );

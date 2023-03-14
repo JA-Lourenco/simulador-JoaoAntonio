@@ -4,8 +4,8 @@ interface CardProps {
   title: string;
   firstProperty: string;
   secondProperty: string;
-  firstResult: string;
-  secondResult: string;
+  firstResult: string | undefined;
+  secondResult: string | undefined;
 }
 
 export const Card = ({
