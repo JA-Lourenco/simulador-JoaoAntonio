@@ -162,7 +162,7 @@ export const Home = () => {
             secondProperty="Taxa"
             firstResult={result?.nome}
             secondResult={
-              result?.taxa === null ? "Não Disponível" : `${result?.taxa}%`
+              result?.taxa === null ? "Não Disponível" : result?.taxa
             }
           />
         </ResultSection>
