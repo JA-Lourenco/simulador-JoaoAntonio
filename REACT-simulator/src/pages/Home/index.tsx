@@ -17,21 +17,27 @@ interface ModalitiesProps {
   idModalidade: number;
   categoria: string;
 }
-interface DataProps {
+
+interface ProductsProps {
+  idProduto: number;
+  nome: string;
+}
+
+interface GetInitialDataProps {
   personTypes: PersonTypesProps[];
   modalities: ModalitiesProps[];
 }
 
 export const Home = () => {
-  const [personTypes, setpersonTypes] = useState<OptionsProps[]>([]);
+  const [personTypes, setPersonTypes] = useState<OptionsProps[]>([]);
   const [modalities, setModalities] = useState<OptionsProps[]>([]);
   const [products, setProducts] = useState<OptionsProps[]>([]);
 
-  const getAllData = async () => {
+  const getInitialData = async () => {
     try {
       const {
         data: { personTypes, modalities },
-      } = await api.get<DataProps>("/");
+      } = await api.get<GetInitialDataProps>("/");
 
       const tempPersonTypes = personTypes.map(({ idTipoPessoa, tipo }) => ({
         id: idTipoPessoa,
@@ -43,15 +49,32 @@ export const Home = () => {
         name: categoria,
       }));
 
-      setpersonTypes(tempPersonTypes);
+      setPersonTypes(tempPersonTypes);
       setModalities(tempModalities);
     } catch (error) {
-      console.log("test error", error);
+      console.log("getInitialData error: ", error);
+    }
+  };
+
+  const handleGetProducts = async (idTipoPessoa: string) => {
+    try {
+      const { data } = await api.get<ProductsProps[]>(
+        `/products?idTipoPessoa=${idTipoPessoa}`
+      );
+
+      const tempProducts = data.map(({ idProduto, nome }) => ({
+        id: idProduto,
+        name: nome,
+      }));
+
+      setProducts(tempProducts);
+    } catch (error) {
+      console.log("handleGetProducts error: ", error);
     }
   };
 
   useEffect(() => {
-    getAllData();
+    getInitialData();
   }, []);
 
   return (
@@ -60,9 +83,18 @@ export const Home = () => {
 
       <Container>
         <InputSection>
-          <SelectComp label="Tipo Pessoa" options={personTypes} />
-          <SelectComp label="Modalidade" options={modalities} />
-          <SelectComp label="Produto" options={products} />
+          <SelectComp
+            label="Tipo Pessoa"
+            options={personTypes}
+            onChange={(value) => handleGetProducts(value)}
+          />
+          <SelectComp
+            label="Modalidade"
+            options={modalities}
+            onChange={() => {}}
+          />
+          <SelectComp label="Produto" options={products} onChange={() => {}} />
+
           <InputComp label="Renda" placeholder="Valor da Renda Mínima" />
         </InputSection>
 
