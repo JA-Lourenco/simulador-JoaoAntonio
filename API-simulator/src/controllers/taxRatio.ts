@@ -61,7 +61,6 @@ export const getTaxRatio = async (req: Request, res: Response) => {
       entity: "RelacaoTaxas rt",
       extra: taxJoin,
       condition: taxWhere,
-      log: true,
     });
 
     res.status(200).json(taxRatioResult[0]);
