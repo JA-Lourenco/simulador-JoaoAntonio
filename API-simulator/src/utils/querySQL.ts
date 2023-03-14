@@ -4,8 +4,8 @@ import { databaseConnect } from "../database";
 interface QuerySQLProps {
   attributes?: string;
   entity: string;
-  condition?: string;
   extra?: string;
+  condition?: string;
   log?: boolean;
 }
 
